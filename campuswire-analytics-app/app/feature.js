@@ -1,6 +1,5 @@
-'use client'
 import Link from 'next/link';
-import { Button } from '@material-ui/core';
+import Button from '@mui/material/Button'
 import { Young_Serif } from 'next/font/google'
 const youngSerif = Young_Serif({
     subsets: ['latin'],
@@ -9,7 +8,7 @@ const youngSerif = Young_Serif({
 // Returns a formatted Feature component for the Overview tab given a title and some data
 export default function Feature(props){
     return (
-        <div style={{backgroundImage: 'linear-gradient(rgba(0, 224, 255, 0.45), rgba(240, 56, 255, 0.55))', borderRadius: '10px', padding: '20px', margin: '20px', width: '18%'}}>
+        <div className={youngSerif.className} style={{backgroundImage: 'linear-gradient(rgba(0, 224, 255, 0.45), rgba(240, 56, 255, 0.55))', borderRadius: '10px', padding: '20px', margin: '20px', width: '18%'}}>
             <div style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
                 <div style={{textAlign:'center', fontFamily: youngSerif, fontSize:'20px', backgroundColor:'rgba(255, 255, 255, 0.70)', borderRadius:'10px', width:'100%', padding:'6px', marginBottom:'9px', marginRight:'9px'}}>{props.title}</div>
             </div>
