@@ -25,9 +25,9 @@ function RangeChooser() {
   };
 
   const handleDateChange = async (values) => {
-    console.log(values);
     if(values){
       router.push('/home-page?startDate=' + getYearMonthDay(new Date(values[0].$d)) + '&endDate=' + getYearMonthDay(new Date(values[1].$d)));
+      router.refresh();
     }
   };
 

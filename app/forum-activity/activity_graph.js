@@ -12,7 +12,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Button from "@mui/material/Button";
@@ -87,7 +87,7 @@ export default function ActivityGraph({ data, startDate, endDate } = mp()) {
   }
 
   let chartData = {
-    labels: currentLabels.map((x) => x.substring(5, 10)),
+    labels: generateLabels(new Date(startDate.getTime() + (currentDayIndex * 24 * 60 * 60 * 1000)).toISOString().substring(0, 10), currentInterval).map((x) => x.substring(5, 10)),
     datasets: [
       {
         label: "Posts",
