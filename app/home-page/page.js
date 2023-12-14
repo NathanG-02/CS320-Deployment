@@ -34,22 +34,22 @@ export default async function Page(props) {
   let forumActivity, startDate, endDate;
   // Create initially empty variables
 
+  farthestPastDate = '2022-09-16';
+
+  // Set collection date
+  collectionDate = '2022-12-15';
+
+  if(await props.searchParams.startDate !== undefined && await props.searchParams.endDate !== undefined){
+    farthestPastDate = await props.searchParams.startDate;
+    collectionDate = await props.searchParams.endDate;
+  }
+
+  // Get the number of days prior they want included
+  let thresholdDaysPrior = (new Date(collectionDate).getTime() - new Date(farthestPastDate).getTime()) / (1000 * 60 * 60 * 24);
+
   try {
     await client.connect();
     // Connect to cluster
-
-    farthestPastDate = '2022-09-16';
-
-    // Set collection date
-    collectionDate = '2022-12-15';
-
-    if(props.searchParams.startDate !== undefined && props.searchParams.endDate !== undefined){
-      farthestPastDate = props.searchParams.startDate;
-      collectionDate = props.searchParams.endDate;
-    }
-
-    // Get the number of days prior they want included
-    let thresholdDaysPrior = (new Date(collectionDate).getTime() - new Date(farthestPastDate).getTime()) / (1000 * 60 * 60 * 24);
 
     const collection = client.db("posts").collection(collectionDate);
     // get collection "2022-09-15" from database "posts"
