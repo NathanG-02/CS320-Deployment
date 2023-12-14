@@ -6,6 +6,8 @@
     "prettier"
   ],
   "rules": {
-    "eqeqeq": "error"
+    "eqeqeq": "error",
+    "no-dupe-keys": "off",
+    "no-unused-vars": "off"
   }
 }

@@ -1,11 +1,18 @@
 "use client";
 import { DatePicker } from "antd";
-import { useState } from "react";
+import { useRouter } from 'next/navigation';
 const { RangePicker } = DatePicker;
 
 function RangeChooser() {
-  const [dates, setDates] = useState([]);
-  // console.log(dates);
+
+  const router = useRouter();
+
+  const disabledDate = (current) => {
+    const currentDate = current ? current.valueOf() : 0;
+    const startDate = new Date("2022-09-16").valueOf();
+    const endDate = new Date("2022-12-15").valueOf();
+    return currentDate < startDate || currentDate > endDate;
+  };
 
   const getYearMonthDay = (date) => {
     let year = date.getFullYear(); // Get the year (YYYY)
@@ -17,60 +24,16 @@ function RangeChooser() {
     return formattedDate;
   };
 
-  const disabledDate = (current) => {
-    const currentDate = current ? current.valueOf() : 0;
-    const startDate = new Date("2022-09-16").valueOf();
-    const endDate = new Date("2022-12-17").valueOf();
-    return currentDate < startDate || currentDate > endDate;
-  };
-
   const handleDateChange = async (values) => {
-    let beginDate = new Date(values[0].$d);
-    let formattedBeginDate = getYearMonthDay(beginDate);
-    let endDate = new Date(values[1].$d);
-    let formattedEndDate = getYearMonthDay(endDate);
-
-    if (values && values.length === 2) {
-      setDates([formattedBeginDate, formattedEndDate]);
-      const diffDays = Math.floor(
-        (new Date(formattedEndDate) - new Date(formattedBeginDate)) /
-          (1000 * 3600 * 24),
-      );
-      const date = [formattedBeginDate, formattedEndDate, diffDays];
-
-      try {
-        const response = await fetch("/api/current", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ date }),
-        });
-        window.location.reload(false);
-        if (response.ok) {
-          console.log("Date saved successfully");
-          // Handle success if needed
-        } else {
-          console.error("Failed to save date");
-          // Handle failure if needed
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        // Handle other errors
-      }
-    } else {
-      setDates([]);
+    console.log(values);
+    if(values){
+      router.push('/home-page?startDate=' + getYearMonthDay(new Date(values[0].$d)) + '&endDate=' + getYearMonthDay(new Date(values[1].$d)));
     }
   };
 
   return (
     <div style={{ margin: '20px', cursor: "pointer" }}>
       <RangePicker onChange={handleDateChange} disabledDate={disabledDate} />
-      {dates.length > 0 && (
-        <div>
-          Selected Dates: {dates[0]} to {dates[1]}
-        </div>
-      )}
     </div>
   );
 }

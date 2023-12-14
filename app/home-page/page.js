@@ -15,7 +15,7 @@ const youngSerif = Young_Serif({
   weight: "400",
 });
 
-export default async function Page() {
+export default async function Page(props) {
   const ActivityGraph = dynamic(() => import('../forum-activity/activity_graph.js'), { ssr: false })
 
   // initialize mongoclient credentials
@@ -32,27 +32,25 @@ export default async function Page() {
   let collectionDate = "";
   let farthestPastDate = "";
   let forumActivity, startDate, endDate;
-  // Create initially empty input text variable
+  // Create initially empty variables
 
   try {
     await client.connect();
     // Connect to cluster
 
-    const userCollection = client
-      .db("userInput")
-      .collection("dates")
-      .find()
-      .sort({ _id: -1 })
-      .limit(1);
-    let userInput = await userCollection.toArray();
-
-    farthestPastDate = userInput[0].date[0];
+    farthestPastDate = '2022-09-16';
 
     // Set collection date
-    collectionDate = userInput[0].date[1];
+    collectionDate = '2022-12-15';
+
+    if(props.searchParams.startDate !== undefined && props.searchParams.endDate !== undefined){
+      farthestPastDate = props.searchParams.startDate;
+      collectionDate = props.searchParams.endDate;
+    }
 
     // Get the number of days prior they want included
-    let thresholdDaysPrior = userInput[0].date[2];
+    let thresholdDaysPrior = (new Date(collectionDate).getTime() - new Date(farthestPastDate).getTime()) / (1000 * 60 * 60 * 24);
+
     const collection = client.db("posts").collection(collectionDate);
     // get collection "2022-09-15" from database "posts"
 
